@@ -4,6 +4,7 @@ import SiteLayout from "./components/SiteLayout";
 import InfoPage from "./pages/InfoPage";
 import HomePage from "./pages/HomePage";
 import CameraPage from "./pages/CameraPage";
+import CameraSummaryPage from "./pages/CameraSummaryPage";
 import ProfilePage from "./pages/ProfilePage";
 import "./App.css";
 
@@ -14,6 +15,7 @@ function AppRoutes() {
         <Route index element={<InfoPage />} />
         <Route path="home" element={<HomePage />} />
         <Route path="camera" element={<CameraPage />} />
+        <Route path="camera/summary" element={<CameraSummaryPage />} />
         <Route path="profile" element={<ProfilePage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
