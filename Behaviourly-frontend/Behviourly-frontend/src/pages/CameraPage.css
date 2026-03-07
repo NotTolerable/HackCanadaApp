@@ -1,0 +1,20 @@
+.camera-page {
+  padding: 2rem 0 4rem;
+  animation: page-fade-in 0.5s ease-out;
+}
+
+.camera-title {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  animation: page-fade-up 0.5s ease-out backwards;
+}
+
+.camera-placeholder {
+  margin: 0;
+  font-size: 1rem;
+  color: #64748b;
+  animation: page-fade-up 0.5s ease-out 0.1s backwards;
+}
