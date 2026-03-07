@@ -57,6 +57,10 @@ export default function Camera({ onRecordingComplete }) {
 
   function startRecording() {
     const stream = videoRef.current.srcObject;
+    if (!stream) {
+      console.warn("[Camera] startRecording called but no media stream is attached");
+      return;
+    }
     chunksRef.current = [];
 
     const mediaRecorder = new MediaRecorder(stream, {
@@ -71,7 +75,6 @@ export default function Camera({ onRecordingComplete }) {
       console.log("[Camera] MediaRecorder onstop fired");
       const blob = new Blob(chunksRef.current, { type: "video/webm" });
       const url = URL.createObjectURL(blob);
-      stopCamera();
       if (onRecordingComplete) onRecordingComplete(blob, url);
     };
 
@@ -84,7 +87,6 @@ export default function Camera({ onRecordingComplete }) {
     const mr = mediaRecorderRef.current;
     console.log("[Camera] stopRecording called, MediaRecorder state:", mr?.state);
     if (mr?.state === "recording") {
-      stopCamera();
       mr.stop();
       setRecording(false);
     }
