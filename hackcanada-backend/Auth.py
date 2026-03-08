@@ -436,6 +436,55 @@ def get_interviews():
         db.close()
 
 
+@app.route("/interviews", methods=["POST"])
+def create_interview():
+    user_session = session.get("user")
+    if not user_session:
+        return jsonify({"error": "Not authenticated."}), 401
+
+    payload = request.get_json(silent=True) or {}
+    company = (payload.get("company") or "").strip()
+    role = (payload.get("role") or "").strip()
+    description = (payload.get("description") or "").strip()
+
+    if not company or not role or not description:
+        return jsonify({"error": "company, role, and description are required."}), 400
+
+    db = SessionLocal()
+    try:
+        interview = Interview(
+            id=f"manual-{uuid.uuid4()}",
+            user_id=user_session["sub"],
+            company=company,
+            role=role,
+            interview_date=None,
+            interview_type=description,
+            email_subject="Manual interview",
+            email_from="Manual entry",
+            email_date=None,
+            email_snippet=description,
+            raw_summary=description,
+        )
+        db.add(interview)
+        db.commit()
+        db.refresh(interview)
+
+        return jsonify({
+            "id": interview.id,
+            "company": interview.company,
+            "role": interview.role,
+            "interview_date": interview.interview_date,
+            "interview_type": interview.interview_type,
+            "email_subject": interview.email_subject,
+            "email_from": interview.email_from,
+            "email_date": interview.email_date,
+            "summary": interview.raw_summary,
+            "created_at": interview.created_at.isoformat() if interview.created_at else None,
+        }), 201
+    finally:
+        db.close()
+
+
 # ─── Route: /interviews/<id>/questions ────────────────────────────────────────
 # Returns behavioral questions for a specific interview.
 
