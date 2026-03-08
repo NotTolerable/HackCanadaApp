@@ -52,6 +52,13 @@ export default function Interview() {
   const cameraRef = useRef(null)
   const lastRecordingBlobRef = useRef(null)
 
+  useEffect(() => {
+    return () => {
+      stopSpeaking()
+      cameraRef.current?.cleanup?.()
+    }
+  }, [])
+
   // Check if backend is up and AI (Gemini) is configured
   useEffect(() => {
     const base = (import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8001").replace(/\/$/, "")
@@ -302,6 +309,10 @@ export default function Interview() {
       }
       setPresageLoading(false)
     }
+
+    if (currentQ >= questions.length - 1) {
+      cameraRef.current?.cleanup?.()
+    }
   }
 
   function handleNextQuestion() {
@@ -518,7 +529,7 @@ export default function Interview() {
               onClick={() => {
                 stopSpeaking()
                 setEnded(true)
-                cameraRef.current?.stopRecording?.()
+                cameraRef.current?.cleanup?.()
               }}
               className="interview-end-btn"
             >
