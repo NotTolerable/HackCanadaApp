@@ -17,8 +17,26 @@ Keep this terminal open. The frontend is configured to call `http://localhost:80
 
 ## Auth (Flask, optional)
 
-`Auth.py` runs the Flask app on port **8000** (login, logout, `/me`). Run it only if you need that auth flow:
+The Auth server serves `/login` and `/callback` for Google sign-in. **It must be running** for "Try it for free" or you’ll get "localhost sent an invalid response" when the app redirects to login.
 
-```bash
-python Auth.py
-```
+1. **Create `.env`** from the example:
+   ```bash
+   cp .env.example .env
+   ```
+   Edit `.env` and set `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`, and `FLASK_SECRET_KEY`.
+
+2. **Install dependencies** (if needed):
+   ```bash
+   pip install flask requests python-dotenv sqlalchemy
+   ```
+
+3. **Run the Auth server** (default port 5000):
+   ```bash
+   python Auth.py
+   ```
+
+4. **Use a different port** (e.g. if 5000 is in use):
+   ```bash
+   PORT=5001 python Auth.py
+   ```
+   Then in `.env` set `REDIRECT_URI=http://localhost:5001/callback` and add that URL to Auth0 **Allowed Callback URLs**.
